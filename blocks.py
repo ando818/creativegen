@@ -41,6 +41,7 @@ colors = ['snow','RoyalBlue1', 'RoyalBlue2', 'RoyalBlue3', 'RoyalBlue4', 'blue2'
     'purple1', 'purple2', 'purple3', 'purple4', 'MediumPurple1', 'MediumPurple2',
     'MediumPurple3', 'MediumPurple4', 'thistle1', 'thistle2', 'thistle3', 'thistle4']
 
+barWidth = 100
 
 class Bar:
 	def __init__(self, len, width, color):
@@ -80,13 +81,13 @@ def createBars(screenSize, numBars, minBarSize, maxBarSize, barWidth):
 def genRows(numRows):
         rows =[]
         for i in range(0,numRows):
-                bars = createBars(2560, 8, 250, 600, 100);
+                bars = createBars(2560, 8, 250, 600, barWidth);
                 rows.append(Row(bars))
         return rows;
 
 def moveRows(rows):
         rows.pop()
-        bars = createBars(2560, 8, 100, 450, 100);
+        bars = createBars(2560, 8, 100, 450, barWidth);
         rows.insert(0, Row(bars))
         return rows
 
@@ -98,7 +99,7 @@ def draw():
 	startingHeight = 0;
 	for row in genRows(10):
 		row.drawOnCanvas(startingHeight, w)
-		startingHeight += 100
+		startingHeight += barWidth
 	w.after(250, draw)
 
 draw()
