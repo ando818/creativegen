@@ -57,11 +57,11 @@ class Row:
 		for bar in self.bars:
 			barStrs.append("".join(['-' for i in range(0, bar.len)]))
 		print("|".join(barStrs))
-	def drawOnCanvas(self, startingHeight, canvas):
-		point = 0;
+	def drawOnCanvas(self, canvas, startingHeight):
+		xPoint = 0;
 		for bar in self.bars:
-			canvas.create_rectangle(point, startingHeight, point+bar.len, startingHeight+bar.width, fill=bar.color)
-			point += bar.len
+			canvas.create_rectangle(xPoint, startingHeight, xPoint+bar.len, startingHeight+bar.width, fill=bar.color)
+			xPoint += bar.len
 		canvas.pack()
 			
 
@@ -70,8 +70,8 @@ def createBars(screenSize, numBars, minBarSize, maxBarSize, barWidth):
 	bars = []
 	for i in range(0, numBars):
 		numRemain = numBars - i -1;
-		smallestPossible = sizeRemain - (numRemain*maxBarSize)
-		largestPossible = sizeRemain - (numRemain*minBarSize)
+		smallestPossible = sizeRemain - (numRemain * maxBarSize)
+		largestPossible = sizeRemain - (numRemain * minBarSize)
 		barLength = random.randint(max(smallestPossible, minBarSize), min(maxBarSize, largestPossible))
 		sizeRemain -= barLength
 		randColor = colors[random.randint(0, len(colors)-1)]
@@ -93,13 +93,12 @@ def moveRows(rows):
 
 root = Tk()
 w = Canvas(root, width=2560, height=1000)
-rrows = genRows(10)
 
 def draw():
 	startingHeight = 0;
 	for row in genRows(10):
 		row.drawOnCanvas(startingHeight, w)
 		startingHeight += barWidth
-	w.after(250, draw)
+	w.after(500, draw) //120BPM
 
 draw()
