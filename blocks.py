@@ -99,6 +99,6 @@ def draw():
 	for row in genRows(10):
 		row.drawOnCanvas(startingHeight, w)
 		startingHeight += barWidth
-	w.after(500, draw) //120BPM
+	w.after(500, draw) #120BPM
 
 draw()
