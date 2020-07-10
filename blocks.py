@@ -60,7 +60,7 @@ class Row:
 	def drawOnCanvas(self, canvas, startingHeight):
 		xPoint = 0;
 		for bar in self.bars:
-			canvas.create_rectangle(xPoint, startingHeight, xPoint+bar.len, startingHeight+bar.width, fill=bar.color)
+			canvas.create_rectangle(xPoint, startingHeight, xPoint+bar.len, startingHeight + bar.width, fill=bar.color)
 			xPoint += bar.len
 		canvas.pack()
 			
@@ -74,7 +74,7 @@ def createBars(screenSize, numBars, minBarSize, maxBarSize, barWidth):
 		largestPossible = sizeRemain - (numRemain * minBarSize)
 		barLength = random.randint(max(smallestPossible, minBarSize), min(maxBarSize, largestPossible))
 		sizeRemain -= barLength
-		randColor = colors[random.randint(0, len(colors)-1)]
+		randColor = colors[random.randint(0, len(colors) - 1)]
 		bars.append(Bar(barLength, barWidth, randColor))
 	return bars
 
