@@ -6,12 +6,14 @@ class Rectangle:
 		self.height = height
 
 class MoldableRectangle:
-	def __init__(self, width, height):
+	def __init__(self, width, height, l1, l2):
 		self.rect = Rectangle(width, height)
 		self.lEnd = None
 		self.rEnd = None
 		self.tEnd = None
 		self.bEnd = None
+		self.l1 = l1
+		self.l2 = l2
 	def left(self, mRect):
 		self.lEnd = mRect
 		return mRect
@@ -31,7 +33,7 @@ class MoldableRectangle:
 			return Mold([])
 
 		pos = Point(0,0)
-		mTotal = Mold([Piece(pos, self.rect)])
+		mTotal = Mold([Piece(pos, self.rect, self.l1, self.l2)])
 		if (self.lEnd): 
 			lMold, lPos = self.lEnd.weld()
 			newPos = Point(lPos.x + self.lEnd.rect.width, lPos.y)
@@ -39,7 +41,6 @@ class MoldableRectangle:
 			pos = newPos
 		if (self.tEnd): 
 			tMold, tPos = self.tEnd.weld()
-			print(tPos.y)
 			newPos = Point(tPos.x, tPos.y + self.tEnd.rect.height)
 			mTotal = tMold.combine(mTotal, pos, newPos); 
 			pos = newPos
@@ -52,8 +53,10 @@ class MoldableRectangle:
 		return (mTotal, pos)
 
 class Piece:
-	def __init__(self, point, obj):
+	def __init__(self, point, obj, l1, l2):
 		self.point = point;
+		self.l1 = l1
+		self.l2 = l2
 		self.obj = obj
 
 class Mold:

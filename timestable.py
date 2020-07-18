@@ -4,15 +4,21 @@ from window import Window
 from colors import *
 
 def genMolds(i):
-	base = MoldableRectangle(100, 100);
+	row = i
+	col = 0
+	base = MoldableRectangle(100, 100, row, col);
 	orig = base
 	for j in range(0,i-1):
-		orig = orig.right(MoldableRectangle(100, 100))
-		
-	topBase = MoldableRectangle(100, 100);
+		col += 1
+		orig = orig.right(MoldableRectangle(100, 100, row, col))
+	
+	topBase = MoldableRectangle(100, 100, row, col);
 	topOrig = topBase
 	for j in range(0, i-2):
-		topOrig = topOrig.top(MoldableRectangle(100, 100))
+		print(row)
+		topOrig = topOrig.top(MoldableRectangle(100, 100, row, col))
+		row -= 1
+
 	orig.top(topBase)
 	return base
 
@@ -30,7 +36,5 @@ root = Tk()
 canvas = Canvas(root, width=window.width, height=window.height)
 window.draw(canvas)
 
-for p in window.carves:
-	window.carves[p][0].color = 'red'
-
-window.draw(canvas)
+genMolds(3)
+window.getByL1(3)

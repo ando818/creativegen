@@ -34,6 +34,17 @@ class Window:
 		for p in self.carves:
 			l.extend(self.carves[p])
 		return l
+	def getByL1(self, l1):
+		l =[]
+		carves =  self.carvesByL1[l1]
+		for carve in carves:
+			for p in self.carves:
+				for c in self.carves[p]:
+					if (c.piece.l1 == carve.piece.l1):
+						print(c.piece.l1)
+						l.append(c)
+		return l
+
 
 
 class Carve():
