@@ -1,7 +1,6 @@
 from tkinter import *
 import random
 import time
-<<<<<<< HEAD:blocks.py.py
 from colors import colors
 barWidth = 100
 
