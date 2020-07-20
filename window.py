@@ -7,16 +7,11 @@ class Window:
 		self.height = height;
 		self.molds = {}
 		self.carves = defaultdict(list)
-		self.carvesByL1 = defaultdict(list)
-		self.carvesByL2 = defaultdict(list)
 
 	def place(self, point, mold):
 		for piece in mold.pieces:
 			self.carves[point].append(Carve(point, piece))
-			if (hasattr(piece, "l1")):
-				self.carvesByL1[piece.l1].append(Carve(point, piece))
-			if (hasattr(piece, "l2")):
-				self.carvesByL2[piece.l2].append(Carve(point, piece))
+
 
 	def draw(self, canvas):
 		for startP in self.carves:
