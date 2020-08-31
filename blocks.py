@@ -24,13 +24,12 @@ class Row:
 			canvas.create_rectangle(xPoint, startingHeight, xPoint+bar.len, startingHeight + bar.width, fill=bar.color)
 			xPoint += bar.len
 		canvas.pack()
-			
 
 def createBars(screenSize, numBars, minBarSize, maxBarSize, barWidth):
 	sizeRemain = screenSize;
 	bars = []
-	for i in range(0, numBars):
-		numRemain = numBars - i -1;
+	for i in range(0, 8):
+		numRemain = numBars - i - 1;
 		smallestPossible = sizeRemain - (numRemain * maxBarSize)
 		largestPossible = sizeRemain - (numRemain * minBarSize)
 		barLength = random.randint(max(smallestPossible, minBarSize), min(maxBarSize, largestPossible))
@@ -63,3 +62,4 @@ def draw():
 	w.after(500, draw) #120BPM
 
 draw()
+

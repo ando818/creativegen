@@ -5,6 +5,14 @@ class Rectangle:
 		self.width = width
 		self.height = height
 
+class Carve():
+	def __init__(self, point, piece):
+		self.point = point
+		self.piece = piece
+		self.color = 'white'
+	def color(self, color):
+		self.color = color
+
 class MoldableRectangle:
 	def __init__(self, width, height, l1, l2):
 		self.rect = Rectangle(width, height)

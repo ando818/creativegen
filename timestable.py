@@ -2,6 +2,7 @@ from tkinter import *
 from moldpieces import *
 from window import Window
 from colors import *
+from generator import Generator
 
 def genMolds(i):
 	if i == 1:
@@ -27,19 +28,27 @@ def genMolds(i):
 window = Window(800, 800)
 starty=0
 
-for i in range(1,4):
-	rect2= genMolds(i)
-	finalMold, pos = rect2.weld()
-	window.place(Point(0,starty), finalMold)
-	starty+=100
-
-carves = window.getCarves(None, None)
 
 root = Tk()
 canvas = Canvas(root, width=window.width, height=window.height)
-window.draw(canvas)
+gen = Generator()
+window.place(gen)
 
-for carve in window.getCarves(1, None):
-	carve.color = 'red'
+def draw(counter, colorSet):
+	counter +=1
+	colorSet = {}
+	for l in range(1,10):
+		color = getRandColor()
+		colorSet[l] = color
+		if counter % 2 == 0:
+			color = colorSet[l]
+		if counter % 4 == 0:
+			color = 'red'
 
-window.draw(canvas)
+		for point in gen.getLShape(l):
+			carve = gen.getCarves(point[0], point[1])[0]
+			carve.color = color
+	canvas.pack()
+	window.draw(canvas)
+	root.after(430, draw, counter, colorSet)
+draw(0, [])

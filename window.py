@@ -1,21 +1,20 @@
 from colors import *
 from collections import defaultdict 
-
+from moldpieces import Carve
 class Window:
 	def __init__(self, width, height):
 		self.width = width
-		self.height = height;
+		self.height = height
 		self.molds = {}
 		self.carves = defaultdict(list)
+		self.generator = None
 
-	def place(self, point, mold):
-		for piece in mold.pieces:
-			self.carves[point].append(Carve(point, piece))
-
+	def place(self, generator):
+		self.generator = generator
 
 	def draw(self, canvas):
-		for startP in self.carves:
-			carves = self.carves[startP]
+		for startP in self.generator.carves:
+			carves = self.generator.carves[startP]
 			for carve in carves:
 				carveX = carve.piece.point.x
 				carveY = carve.piece.point.y
@@ -35,11 +34,3 @@ class Window:
 					l.append(carve)
 		return l
 
-
-class Carve():
-	def __init__(self, point, piece):
-		self.point = point
-		self.piece = piece
-		self.color = 'white'
-	def color(self, color):
-		self.color = color
