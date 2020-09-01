@@ -3,6 +3,7 @@ from moldpieces import *
 from window import Window
 from colors import *
 from generator import Generator
+from pattern import *
 
 def genMolds(i):
 	if i == 1:
@@ -28,23 +29,20 @@ def genMolds(i):
 window = Window(800, 800)
 starty=0
 
-
 root = Tk()
 canvas = Canvas(root, width=window.width, height=window.height)
 gen = Generator()
 window.place(gen)
 
+seqs = Pattern(16, 10, ['red', 'blue'], [Transition()]).gen()
+
+
 def draw(counter, colorSet):
 	counter +=1
-	colorSet = {}
+	seq = seqs[counter]
+	print(seq)
 	for l in range(1,10):
-		color = getRandColor()
-		colorSet[l] = color
-		if counter % 2 == 0:
-			color = colorSet[l]
-		if counter % 4 == 0:
-			color = 'red'
-
+		color = seq[l]
 		for point in gen.getLShape(l):
 			carve = gen.getCarves(point[0], point[1])[0]
 			carve.color = color
