@@ -4,6 +4,7 @@ from window import Window
 from colors import *
 from generator import Generator
 from pattern import *
+from player import Player
 
 def genMolds(i):
 	if i == 1:
@@ -34,19 +35,18 @@ canvas = Canvas(root, width=window.width, height=window.height)
 gen = Generator()
 window.place(gen)
 
-seqs = Pattern(16, 10, ['red', 'blue'], [Transition()]).gen()
+colorSet = []
+for i in range(0,10):
+	colorSet.append(getRandColor())
 
 
-def draw(counter, colorSet):
-	counter +=1
-	seq = seqs[counter]
-	print(seq)
-	for l in range(1,10):
-		color = seq[l]
-		for point in gen.getLShape(l):
-			carve = gen.getCarves(point[0], point[1])[0]
-			carve.color = color
-	canvas.pack()
-	window.draw(canvas)
-	root.after(430, draw, counter, colorSet)
-draw(0, [])
+seqs = Pattern(200, 10, 4, colorSet, 
+	{ 
+		'symbol': {
+			1: [Swap()]
+		},
+		'symbolSet': {
+			4: [ChangeColorSet()] 
+		}
+	}).gen()
+Player(root, window, canvas, gen, seqs).play(136)
