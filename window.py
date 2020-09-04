@@ -13,6 +13,7 @@ class Window:
 		self.generator = generator
 
 	def draw(self, canvas):
+		canvas.delete("all")
 		for startP in self.generator.carves:
 			carves = self.generator.carves[startP]
 			for carve in carves:
