@@ -1,6 +1,6 @@
 from colors import *
 from collections import defaultdict 
-from moldpieces import Carve
+from moldpieces import Carve, Line
 class Window:
 	def __init__(self, width, height):
 		self.width = width
@@ -19,9 +19,18 @@ class Window:
 			for carve in carves:
 				carveX = carve.piece.point.x
 				carveY = carve.piece.point.y
-				objWidth = carve.piece.obj.width
-				objHeight = carve.piece.obj.height
-				canvas.create_rectangle(startP.x + carveX, startP.y + carveY, startP.x + carveX + objWidth, startP.y + carveY + objHeight, fill=carve.color)
+				if (isinstance(carve.piece.obj, Line)):
+					print('ho')
+					print(carve.piece.obj.length)
+					print(carve.piece.obj.getEndPoint().x)
+					canvas.create_line(startP.x + carveX, startP.y + carveY, startP.x + carveX + carve.piece.obj.getEndPoint().x, startP.y + carveY + carve.piece.obj.getEndPoint().y)
+				else:
+					carveX = carve.piece.point.x
+					carveY = carve.piece.point.y
+					objWidth = carve.piece.obj.width
+					objHeight = carve.piece.obj.height
+
+					canvas.create_rectangle(startP.x + carveX, startP.y + carveY, startP.x + carveX + objWidth, startP.y + carveY + objHeight, fill=carve.color)
 				canvas.pack()
 
 	def getCarves(self, l1, l2):

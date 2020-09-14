@@ -1,9 +1,25 @@
 from tkinter import *
+import math
 
 class Rectangle:
 	def __init__(self, width, height):
 		self.width = width
 		self.height = height
+
+class Line:
+	def __init__(self, length, degrees):
+		self.length = length
+		self.degrees = degrees
+
+	def getEndPoint(self):
+		x = self.length * math.cos(math.radians(self.degrees))
+		y = self.length * math.sin(math.radians(self.degrees))
+		return Point(x,y)
+
+class Hollow:
+	def __init_(self, width, height, image):
+		self.width = width;
+		self.height = height;
 
 class Carve():
 	def __init__(self, point, piece):
@@ -12,6 +28,32 @@ class Carve():
 		self.color = 'white'
 	def color(self, color):
 		self.color = color
+
+class MoldableLine:
+	def __init__(self, length, degrees):
+		self.line = Line(length, degrees)
+		self.length = length
+		self.degrees = degrees
+		self.endM = None
+
+	def end(self, mLine):
+		self.endM = mLine
+	
+	def weld(self):
+		if (self.line == None):
+			return Mold([])
+		pos = Point(0,0)
+		mTotal = Mold([Piece(pos, self.line, "", "")])
+		if (self.endM):
+			eMold, point = self.endM.weld()
+			mTotal = mTotal.combine(eMold, point, self.getEndPoint())
+		return (mTotal, pos)
+
+	def getEndPoint(self):
+		x = self.length * math.cos(math.radians(self.degrees))
+		y = self.length * math.sin(math.radians(self.degrees))
+		print(x)
+		return Point(x,y)
 
 class MoldableRectangle:
 	def __init__(self, width, height, l1, l2):
