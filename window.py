@@ -14,24 +14,21 @@ class Window:
 
 	def draw(self, canvas):
 		canvas.delete("all")
-		for startP in self.generator.carves:
-			carves = self.generator.carves[startP]
-			for carve in carves:
-				carveX = carve.piece.point.x
-				carveY = carve.piece.point.y
-				if (isinstance(carve.piece.obj, Line)):
-					print('ho')
-					print(carve.piece.obj.length)
-					print(carve.piece.obj.getEndPoint().x)
-					canvas.create_line(startP.x + carveX, startP.y + carveY, startP.x + carveX + carve.piece.obj.getEndPoint().x, startP.y + carveY + carve.piece.obj.getEndPoint().y)
-				else:
+		for obj in self.generator.objects:
+			for startP in obj.carves:
+				carves = obj.carves[startP]
+				for carve in carves:
 					carveX = carve.piece.point.x
 					carveY = carve.piece.point.y
-					objWidth = carve.piece.obj.width
-					objHeight = carve.piece.obj.height
-
-					canvas.create_rectangle(startP.x + carveX, startP.y + carveY, startP.x + carveX + objWidth, startP.y + carveY + objHeight, fill=carve.color)
-				canvas.pack()
+					if (isinstance(carve.piece.obj, Line)):
+						canvas.create_line(startP.x + carveX, startP.y + carveY, startP.x + carveX + carve.piece.obj.getEndPoint().x, startP.y + carveY + carve.piece.obj.getEndPoint().y)
+					else:
+						carveX = carve.piece.point.x
+						carveY = carve.piece.point.y
+						objWidth = carve.piece.obj.width
+						objHeight = carve.piece.obj.height
+						canvas.create_rectangle(startP.x + carveX, startP.y + carveY, startP.x + carveX + objWidth, startP.y + carveY + objHeight, fill=carve.color)
+					canvas.pack()
 
 	def getCarves(self, l1, l2):
 		l =[]

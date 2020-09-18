@@ -6,7 +6,7 @@ from generator import Generator
 from pattern import *
 from player import Player
 from collections import defaultdict 
-
+from shapes import *
 window = Window(800, 800)
 starty=0
 
@@ -15,22 +15,19 @@ canvas = Canvas(root, width=window.width, height=window.height)
 
 class Generator():
 	def __init__(self):
-		mL = MoldableLine(400, 45)
-		mL2 = MoldableLine(400, -45)
-		mL.end(mL2)
-		mlPieces, pos = mL.weld()
-		self.carves =defaultdict(list)
-		for piece in mlPieces.pieces:
-			print( piece.point.x)
-			self.carves[Point(0,0)].append(Carve(Point(0, 0), piece))
+		self.carves = defaultdict(list)
+		self.objects = defaultdict(list)
+		startX = 0
+		for i in range(0,5):
+			newBuilding = Building(150, 80)
+			self.objects[Point(0, startX)].append(newBuilding)
+
+	def getObjects():
+		return self.objects
 
 gen = Generator()
 window.place(gen)
-
-canvas.pack()
 window.draw(canvas)
-
-
 '''
 colorSet = []
 for i in range(0,10):
