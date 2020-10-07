@@ -1,6 +1,7 @@
 from colors import *
 from collections import defaultdict 
-from moldpieces import Carve, Line
+from moldpieces import Carve, Line, Rectangle, Box
+
 class Window:
 	def __init__(self, width, height):
 		self.width = width
@@ -8,27 +9,37 @@ class Window:
 		self.molds = {}
 		self.carves = defaultdict(list)
 		self.generator = None
-
+		self.xPos = 0
 	def place(self, generator):
 		self.generator = generator
 
 	def draw(self, canvas):
 		canvas.delete("all")
-		for obj in self.generator.objects:
-			for startP in obj.carves:
-				carves = obj.carves[startP]
-				for carve in carves:
-					carveX = carve.piece.point.x
-					carveY = carve.piece.point.y
-					if (isinstance(carve.piece.obj, Line)):
-						canvas.create_line(startP.x + carveX, startP.y + carveY, startP.x + carveX + carve.piece.obj.getEndPoint().x, startP.y + carveY + carve.piece.obj.getEndPoint().y)
-					else:
-						carveX = carve.piece.point.x
-						carveY = carve.piece.point.y
-						objWidth = carve.piece.obj.width
-						objHeight = carve.piece.obj.height
-						canvas.create_rectangle(startP.x + carveX, startP.y + carveY, startP.x + carveX + objWidth, startP.y + carveY + objHeight, fill=carve.color)
-					canvas.pack()
+
+		for shape in self.generator.shapes:
+			shapePos = shape.pos
+			for component in shape.components:
+				componentPos = component.pos
+				self.drawMolds(canvas, component.molds, shapePos + componentPos)
+			self.drawMolds(canvas, shape.molds, shapePos)
+
+		canvas.pack()
+
+	def drawMolds(self, canvas, molds, startPos):
+		wBox = Box(self.xPos, self.xPos+self.width, 0, self.height)
+		for mold in molds:
+			print(mold)
+			moldBox = mold.getBox()
+			if (wBox.contains(moldBox)):
+				for piece in mold.pieces:
+					windowPos = startPos + piece.pos
+					windowPos.x += self.xPos
+					if (isinstance(piece.obj, Line)):
+						canvas.create_line(windowPos.x, windowPos.y, windowPos.x + piece.obj.getEndPoint().x, windowPos.y + piece.obj.getEndPoint().y)
+					if (isinstance(piece.obj, Rectangle)):
+						xwidth = windowPos.x + piece.obj.width
+						yheight = windowPos.y + piece.obj.height
+						canvas.create_rectangle(windowPos.x, windowPos.y, xwidth, yheight, fill=piece.obj.color)
 
 	def getCarves(self, l1, l2):
 		l =[]
@@ -40,4 +51,3 @@ class Window:
 				if (meets):
 					l.append(carve)
 		return l
-

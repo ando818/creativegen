@@ -2,10 +2,16 @@ from tkinter import *
 import math
 
 class Rectangle:
-	def __init__(self, width, height):
+	def __init__(self, width, height, color):
 		self.width = width
 		self.height = height
+		self.color = color
 
+	def color(self, color):
+		self.color = color
+
+	def getBox(self):
+		return Box(0, self.width, 0, self.height)
 class Line:
 	def __init__(self, length, degrees):
 		self.length = length
@@ -54,7 +60,7 @@ class MoldableLine:
 		if (self.line == None):
 			return Mold([])
 		pos = Point(0,0)
-		mTotal = Mold([Piece(pos, self.line, "", "")])
+		mTotal = Mold([Piece(pos, self.line, "")])
 		if (self.endM):
 			eMold, point = self.endM.weld()
 			mTotal = mTotal.combine(eMold, self.getEndPoint(), point)
@@ -66,14 +72,14 @@ class MoldableLine:
 		return Point(x,y)
 
 class MoldableRectangle:
-	def __init__(self, width, height, l1, l2):
-		self.rect = Rectangle(width, height)
+	def __init__(self, width, height, color, name):
+		self.rect = Rectangle(width, height, color)
+		self.color = color
+		self.name = name
 		self.lEnd = None
 		self.rEnd = None
 		self.tEnd = None
 		self.bEnd = None
-		self.l1 = l1
-		self.l2 = l2
 	def left(self, mRect):
 		self.lEnd = mRect
 		return mRect
@@ -92,7 +98,7 @@ class MoldableRectangle:
 		if (self.rect == None):
 			return Mold([])
 		pos = Point(0,0)
-		mTotal = Mold([Piece(pos, self.rect, self.l1, self.l2)])
+		mTotal = Mold([Piece(pos, self.rect, self.name)])
 		if (self.lEnd): 
 			lMold, lPos = self.lEnd.weld()
 			newPos = Point(lPos.x + self.lEnd.rect.width, lPos.y)
@@ -112,29 +118,33 @@ class MoldableRectangle:
 		return (mTotal, pos)
 
 class Piece:
-	def __init__(self, point, obj, l1, l2):
-		self.point = point;
-		self.l1 = l1
-		self.l2 = l2
+	def __init__(self, point, obj, name):
+		self.pos = point;
+		self.name = name
 		self.obj = obj
 	def getBox(self):
 		box = self.obj.getBox()
-		box.topY += self.point.y
-		box.botY + self.point.y
-		box.topX += self.point.x
-		box.botX + self.point.x
+		box.topY += self.pos.y
+		box.botY + self.pos.y
+		box.topX += self.pos.x
+		box.botX + self.pos.x
 		return box
 
 class Mold:
 	def __init__(self, pieces):
 		self.pieces = pieces
+
+	def getPiece(self, name):
+		for piece in self.pieces:
+			if piece.name == name:
+				return piece
+
 	def combine(self, mold, pos1, pos2):
 		xDiff = pos1.x - pos2.x
 		yDiff = pos1.y - pos2.y
-		print(yDiff)
 		for piece in mold.pieces:
-			piece.point.x += xDiff
-			piece.point.y += yDiff
+			piece.pos.x += xDiff
+			piece.pos.y += yDiff
 		return Mold(self.pieces + mold.pieces)
 
 	def getBox(self):
@@ -165,13 +175,9 @@ class Mold:
 			yOff = box.topY
 		if (box.topX < 0):
 			xOff = box.topX
-		print(xOff, yOff)
 		for piece in self.pieces:
-			print(piece.point.y)
-			piece.point.x -= xOff
-			piece.point.y -= yOff
-			print(piece.point.y)
-
+			piece.pos.x -= xOff
+			piece.pos.y -= yOff
 
 class Box:
 	def __init__(self, topX, topY, botX, botY):
@@ -179,7 +185,6 @@ class Box:
 		self.topY = topY
 		self.botX = botX
 		self.botY = botY
-		print("bopx", topX, topY, botX, botY)
 
 	def combine(self, box2):
 		topY = self.topY if self.topY > box2.topY else bot2.topY
@@ -187,7 +192,16 @@ class Box:
 		botY = self.botY if self.botY < box2.botY else bot2.botY
 		botX = self.botX if self.topY < box2.botX else bot2.botX
 
+	def pointInside(self, point):
+		return point.x > self.topX and point.x < botX and point.y < self.topY and point.y > self.botY
+
+	def contains(self, box):
+		return not (self.pointInside(Point(box.topX, box.topY)) or self.pointInside(Point(box.botX, box.botY)))
+
 class Point:
 	def __init__(self, x, y):
 		self.x = x
 		self.y = y
+
+	def __add__(self, o):
+		return Point(self.x + o.x, self.y + o.y)
